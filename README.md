@@ -1,4 +1,8 @@
-# 🤖 Bot Telegram — Lembrete dia sim dia não
+# 🦷 Bot Telegram — Lembrete do Aparelho
+
+Bot que avisa dia sim dia não às 22:30 para colocar o aparelho, com confirmação, streak e comandos.
+
+-----
 
 ## Passo 1 — Criar o bot no Telegram
 
@@ -6,29 +10,33 @@
 1. Envie `/newbot`
 1. Escolha um nome (ex: `Meu Lembrete`) e um username (ex: `meu_lembrete_bot`)
 1. O BotFather vai te dar um **token** — guarde ele (parece: `123456:ABCdef...`)
+1. Abra o seu bot e clique em **Start** para ativá-lo
 
 -----
 
 ## Passo 2 — Descobrir seu Chat ID
 
-1. Procure por **@userinfobot** no Telegram
-1. Envie qualquer mensagem pra ele
-1. Ele responde com seu **Id** — esse é o seu `CHAT_ID`
+1. Acesse no navegador (substituindo pelo seu token):
+   
+   ```
+   https://api.telegram.org/bot<SEU_TOKEN>/getUpdates
+   ```
+1. Procure por `"chat": { "id": 123456789` — esse número é o seu `CHAT_ID`
+- Se o resultado vier vazio, mande uma mensagem pro bot primeiro e tente de novo
 
 -----
 
 ## Passo 3 — Deploy no Railway
 
 1. Acesse [railway.app](https://railway.app) e crie uma conta (gratuita)
-1. Clique em **New Project → Deploy from GitHub repo**
-- Ou use **Deploy from local** se preferir fazer upload direto
-1. Suba os arquivos: `bot.py` e `requirements.txt`
-1. Vá em **Variables** e adicione as duas variáveis de ambiente:
+1. Suba os arquivos `bot.py` e `requirements.txt` no GitHub
+1. No Railway: **New Project → Deploy from GitHub repo**
+1. Vá em **Variables** e adicione:
    
    |Nome       |Valor                      |
    |-----------|---------------------------|
    |`BOT_TOKEN`|o token que o BotFather deu|
-   |`CHAT_ID`  |seu ID numérico do Telegram|
+   |`CHAT_ID`  |seu ID numérico (sem aspas)|
 1. Em **Settings → Start Command**, coloque:
    
    ```
@@ -38,27 +46,47 @@
 
 -----
 
-## Como funciona
+## Como usar
 
-- O bot roda 24/7 na nuvem
-- Todo dia às **22:30 (horário de Brasília)** ele verifica se é dia de enviar
-- O primeiro envio é **19/05/2026**, depois dia sim dia não
-- A mensagem que aparece no Telegram é: *“🦷 Lembrete: coloque o aparelho hoje à noite!”*
+### Lembrete automático
+
+Todo dia às **22:30 (horário de Brasília)** o bot verifica se é dia de enviar e manda uma mensagem aleatória. O primeiro envio é **20/05/2026**, depois dia sim dia não.
+
+Se você não confirmar em **30 minutos**, o bot manda um lembrete de reforço 😅
+
+### Confirmar que colocou
+
+Responda ao bot com o emoji **✅** — ele confirma e atualiza seu streak.
+
+### Comandos disponíveis
+
+|Comando  |O que faz                             |
+|---------|--------------------------------------|
+|✅        |Confirma que colocou o aparelho       |
+|`/status`|Mostra situação do dia, streak e total|
+|`/pular` |Pula o dia de hoje sem perder o streak|
+|`/ajuda` |Lista todos os comandos               |
+
+### Streak 🔥
+
+O bot celebra nas marcas de **3, 7, 14 e 30 dias** seguidos sem esquecer!
 
 -----
 
-## Quer mudar a mensagem?
+## Personalizações
 
-Edite a linha no `bot.py`:
+### Mudar o horário
 
 ```python
-text="🦷 Lembrete: coloque o aparelho hoje à noite!"
+scheduler.add_job(..., hour=22, minute=30)
 ```
 
-## Quer mudar o horário?
+### Mudar ou adicionar mensagens
 
-Edite:
+Edite a lista `MENSAGENS` no início do `bot.py`.
+
+### Mudar a data de início
 
 ```python
-scheduler.add_job(enviar_aviso, "cron", hour=22, minute=30)
+START_DATE = date(2026, 5, 20)
 ```
