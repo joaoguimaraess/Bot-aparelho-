@@ -34,7 +34,7 @@ async def enviar_aviso():
 
 async def main():
     scheduler = AsyncIOScheduler(timezone=TIMEZONE)
-    scheduler.add_job(enviar_aviso, "cron", hour=0, minute=55)
+    scheduler.add_job(enviar_aviso, "cron", hour=1, minute=4)
     scheduler.start()
     print("Bot rodando... aguardando 22:30 🤖")
     await asyncio.Event().wait()  # roda pra sempre
