@@ -13,7 +13,7 @@ from apscheduler.schedulers.asyncio import AsyncIOScheduler
 BOT_TOKEN  = os.environ["BOT_TOKEN"]
 CHAT_ID    = int(os.environ["CHAT_ID"])
 TIMEZONE   = "America/Sao_Paulo"
-START_DATE = date(2026, 5, 20)
+START_DATE = date(2026, 5, 19)
 DATA_FILE  = "dados.json"
 # ─────────────────────────────────────────────────────────────────
 
