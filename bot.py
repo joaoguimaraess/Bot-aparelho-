@@ -186,7 +186,7 @@ async def main():
     app.add_handler(MessageHandler(filters.TEXT & ~filters.COMMAND, handle_confirmacao))
 
     scheduler = AsyncIOScheduler(timezone=TIMEZONE)
-    scheduler.add_job(lambda: asyncio.create_task(enviar_aviso(bot)), "cron", hour=22, minute=30)
+    scheduler.add_job(enviar_aviso, "cron", hour=22, minute=30, args=[bot])
     scheduler.start()
 
     print("🤖 Bot rodando! Aguardando 22:30...")
